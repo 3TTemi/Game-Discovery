@@ -10,15 +10,21 @@ import {
 import { Game } from "../hooks/useGames";
 import PlatformIconList from "./PlatformIconList";
 import CriticScore from "./CriticScore";
+import { useState } from "react";
 
 interface Props {
   game: Game;
-  updateClick: () => void;
+  updateClick: () => Promise<string>;
 }
 
-// On click of button reload the Game Grid class with the desired input
-
 const GameCard = ({ game, updateClick }: Props) => {
+  const [updateText, setUpdateText] = useState<string>("");
+
+  const handleUpdateClick = async () => {
+    const update = await updateClick();
+    setUpdateText(update);
+  };
+
   return (
     <Card borderRadius={15} overflow="hidden">
       <Image src={game.background_image} />
@@ -32,9 +38,9 @@ const GameCard = ({ game, updateClick }: Props) => {
         </HStack>
         <HStack paddingTop={3} justifyContent="center">
           <Button>Game Summary</Button>
-          <Button onClick={updateClick}>Latest Update</Button>
+          <Button onClick={handleUpdateClick}>Latest Update</Button>
         </HStack>
-        {/* <Text>{game.update_text}</Text> */}
+        {updateText && <Text paddingTop={3}>{updateText}</Text>}
       </CardBody>
     </Card>
   );
