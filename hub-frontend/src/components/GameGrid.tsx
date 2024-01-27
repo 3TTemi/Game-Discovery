@@ -19,6 +19,18 @@ const GameGrid = () => {
     }
   };
 
+  const handleSummaryGame = async (gameName: string): Promise<string> => {
+    try {
+      const response = await apiClient.get(
+        `/game-summary/${encodeURIComponent(gameName)}`
+      );
+      return response.data.summary_text;
+    } catch (error) {
+      console.error("Error fetching game summaries: ", error);
+      return ""; // return an empty string, thus not updating the frontend
+    }
+  };
+
   return (
     <>
       {error && <Text>{error}</Text>}
@@ -28,6 +40,7 @@ const GameGrid = () => {
             key={game.id}
             game={game}
             updateClick={() => handleUpdateGame(game.name)}
+            summaryClick={() => handleSummaryGame(game.name)}
           />
         ))}
       </SimpleGrid>

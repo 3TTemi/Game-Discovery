@@ -27,3 +27,5 @@ dist-ssr
 venv/ 
 .requirements.txt
 
+__pycache__
+instance 
